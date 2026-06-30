@@ -125,7 +125,7 @@ Example:
 
 ## Author
 
-**Vamsi Kasi**
+**Lokesh Byroj**
 
 B.Tech Electronics and Communication Engineering (ECE)
 
