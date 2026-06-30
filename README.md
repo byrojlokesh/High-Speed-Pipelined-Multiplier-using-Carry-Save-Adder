@@ -82,32 +82,36 @@ The multiplier consists of the following stages:
 
 ## Code
 
-1. FULL ADDER
-------------- module full_adder(
-input a, b, cin, output sum, cout
+1. FULL ADDER-------------
+ module full_adder(
+input a, b, cin,
+output sum, cout
 );
 assign sum = a ^ b ^ cin;
 assign cout = (a & b) | (b & cin) | (a & cin);
 endmodule
 
-2. CARRY SAVE ADDER (CSA)
-------------------------- module carry_save_adder #(parameter N = 16)(
-input [N-1:0] a, b, c, output [N-1:0] sum, output [N-1:0] carry
+3. CARRY SAVE ADDER (CSA)-------------------------
+ module carry_save_adder #(parameter N = 16)(
+input [N-1:0] a, b, c,
+output [N-1:0] sum, output [N-1:0] carry
 );
 genvar i;
 generate
-for(i = 0; i < N; i = i + 1) begin
+for(i = 0; i < N; i = i + 1)
+ begin
 assign sum[i] = a[i] ^ b[i] ^ c[i];
 assign carry[i] = (a[i] & b[i]) | (b[i] & c[i]) | (a[i] & c[i]);
 end
 endgenerate
 endmodule
 
-3. PIPELINE REGISTER
--------------------- module pipeline_reg #(parameter N = 16)(
+5. PIPELINE REGISTER--------------------
+ module pipeline_reg #(parameter N = 16)(
 input clk,
 input reset,
-input [N-1:0] d, output reg [N-1:0] q
+input [N-1:0] d,
+ output reg [N-1:0] q
 );
 always @(posedge clk or posedge reset) begin
 if (reset)
@@ -118,25 +122,28 @@ q <= d;
 end
 endmodule
 
-4. RIPPLE CARRY ADDER
---------------------- module ripple_carry_adder #(parameter N = 16)(
+4. RIPPLE CARRY ADDER--------------------- 
+module ripple_carry_adder #(parameter N = 16)(
 
-input [N-1:0] a, b, output [N:0] sum
+input [N-1:0] a, b, 
+output [N:0] sum
 );
 assign sum = a + b;
 endmodule
 
-5. TOP MODULE
-------------- module pipelined_multiplier_csa(
+5. TOP MODULE------------- 
+module pipelined_multiplier_csa(
 input clk,
 input reset,
 input [7:0] A,
-input [7:0] B, output [15:0] P
+input [7:0] B,
+output [15:0] P
 );
 wire [15:0] pp [7:0];
 genvar i;
 generate
-for(i = 0; i < 8; i = i + 1) begin
+for(i = 0; i < 8; i = i + 1)
+ begin
 assign pp[i] = B[i] ? (A << i) : 16'b0;
 end
 endgenerate
@@ -155,8 +162,8 @@ ripple_carry_adder final_adder(psum2, pcarry2, final_sum);
 assign P = final_sum[15:0];
 endmodule
 
-6. TESTBENCH
------------- module tb_pipelined_multiplier;
+7. TESTBENCH------------ 
+module tb_pipelined_multiplier;
 
 reg clk, reset;
 reg [7:0] A, B;
